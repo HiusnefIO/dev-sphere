@@ -206,28 +206,28 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 
 ## 🗺️ Roadmap
 
-### Phase 1 - MVP (Q1 2026) ✅
+### Phase 1 - MVP (3/2026) ✅
 
-- [x] Basic user registration and authentication
-- [x] Profile creation and management
-- [x] Job posting and search
-- [x] Simple matching algorithm
+- [ ] Basic user registration and authentication
+- [ ] Profile creation and management
+- [ ] Job posting and search
+- [ ] Simple matching algorithm
 
-### Phase 2 - Blockchain Integration (Q2 2026) 🚧
+### Phase 2 - Blockchain Integration (5/2026) 🚧
 
 - [ ] Web3 wallet integration
 - [ ] On-chain profile verification
 - [ ] Smart contracts for job agreements
 - [ ] IPFS integration for file storage
 
-### Phase 3 - AI Enhancement (Q3 2026)
+### Phase 3 - AI Enhancement (7/2026)
 
 - [ ] Advanced ML matching algorithm
 - [ ] Skill gap analysis
 - [ ] Career path recommendations
 - [ ] Automated resume parsing
 
-### Phase 4 - Enterprise Features (Q4 2026)
+### Phase 4 - Enterprise Features (9/2026)
 
 - [ ] Advanced recruitment pipeline
 - [ ] Team collaboration tools
