@@ -1,0 +1,32 @@
+@startuml uc-clockchain-verification
+left to right direction
+actor Developer
+actor "Blockchain Network" as BC
+
+
+rectangle "Blockchain Verification" {
+(Connect Wallet)
+(Submit Verification Request)
+(Generate Profile Hash)
+(Store Hash On-chain)
+(Verify Certificate)
+(Mint NFT Badge)
+}
+
+
+Developer -- (Connect Wallet)
+Developer -- (Submit Verification Request)
+Developer -- (Verify Certificate)
+
+
+(Submit Verification Request) --> (Generate Profile Hash) : <<include>>
+(Generate Profile Hash) --> (Store Hash On-chain) : <<include>>
+(Verify Certificate) --> (Mint NFT Badge) : <<extend>>
+
+
+BC -- (Store Hash On-chain)
+BC -- (Verify Certificate)
+BC -- (Mint NFT Badge)
+
+
+@enduml

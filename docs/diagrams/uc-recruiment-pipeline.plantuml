@@ -1,0 +1,29 @@
+@startuml uc-recruiment-pipeline
+left to right direction
+actor Recruiter
+actor "Organization Admin" as OrgAdmin
+
+
+rectangle "Recruitment Pipeline" {
+(Define Pipeline Stages)
+(Shortlist Candidate)
+(Schedule Interview)
+(Collect Interview Feedback)
+(Make Hiring Decision)
+(Send Offer)
+(Onboard Candidate)
+}
+
+OrgAdmin --> (Define Pipeline Stages)
+
+
+Recruiter --> (Shortlist Candidate)
+Recruiter --> (Schedule Interview)
+Recruiter --> (Collect Interview Feedback)
+Recruiter --> (Make Hiring Decision)
+Recruiter --> (Send Offer)
+
+(Send Offer) --> (Onboard Candidate) : <<extend>>
+
+
+@enduml

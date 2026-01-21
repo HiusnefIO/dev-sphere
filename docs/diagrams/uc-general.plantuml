@@ -1,0 +1,72 @@
+@startuml uc-general
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam nodesep 20
+skinparam ranksep 25
+
+actor Developer
+actor Recruiter
+actor "Organization Admin" as OrgAdmin
+actor "System Admin" as SysAdmin
+
+rectangle "DevSphere Platform" {
+
+  (Register / Login) as UC_Login
+  (Manage Profile) as UC_Profile
+  (Manage Portfolio) as UC_Portfolio
+  (Verify Skills On-chain) as UC_Verify
+
+  (Apply Job) as UC_Apply
+  (View Job Recommendations) as UC_JobReco
+  (View Candidate Matching) as UC_CandidateMatch
+  (Generate Job Recommendation) as UC_AIJob
+  (Generate Candidate Matching) as UC_AIMatch
+  (Skill Gap Analysis) as UC_SkillGap
+
+  (Post Job) as UC_PostJob
+  (Search Candidate) as UC_SearchCandidate
+  (Manage Recruitment Pipeline) as UC_Pipeline
+
+  (Manage Organization) as UC_Org
+  (Configure Hiring Workflow) as UC_Workflow
+  (View Analytics Dashboard) as UC_Analytics
+
+  (System Configuration) as UC_Config
+  (User & Role Management) as UC_Role
+  (Audit & Monitoring) as UC_Audit
+
+  (Store Profile Hash) as UC_StoreHash
+  (Verify Certificate) as UC_VerifyCert
+  (Execute Smart Contract) as UC_SmartContract
+}
+
+Developer --> UC_Login
+Developer --> UC_Profile
+Developer --> UC_Portfolio
+Developer --> UC_Verify
+Developer --> UC_Apply
+Developer --> UC_JobReco
+
+Recruiter --> UC_Login
+Recruiter --> UC_PostJob
+Recruiter --> UC_SearchCandidate
+Recruiter --> UC_Pipeline
+Recruiter --> UC_CandidateMatch
+
+OrgAdmin --> UC_Org
+OrgAdmin --> UC_Workflow
+OrgAdmin --> UC_Analytics
+
+SysAdmin --> UC_Config
+SysAdmin --> UC_Role
+SysAdmin --> UC_Audit
+UC_JobReco --> UC_AIJob : <<include>>
+UC_CandidateMatch --> UC_AIMatch : <<include>>
+UC_Profile --> UC_SkillGap : <<include>>
+
+UC_Verify --> UC_StoreHash : <<include>>
+UC_Verify --> UC_VerifyCert : <<include>>
+UC_Apply --> UC_SmartContract : <<extend>>
+
+@enduml

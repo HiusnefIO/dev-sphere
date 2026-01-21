@@ -1,0 +1,29 @@
+@startuml uc-job-application-flow
+left to right direction
+actor Developer
+actor Recruiter
+
+
+rectangle "Job Application" {
+(Search Job)
+(View Job Detail)
+(Apply Job)
+(Upload CV / Portfolio)
+(Track Application Status)
+(Withdraw Application)
+}
+
+
+Developer --> (Search Job)
+Developer --> (View Job Detail)
+Developer --> (Apply Job)
+Developer --> (Track Application Status)
+Developer --> (Withdraw Application)
+
+(Apply Job) --> (Upload CV / Portfolio) : <<include>>
+
+
+Recruiter --> (Track Application Status)
+
+
+@enduml
