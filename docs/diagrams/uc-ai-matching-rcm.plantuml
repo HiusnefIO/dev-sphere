@@ -1,0 +1,33 @@
+@startuml uc-ai-matching-rcm
+left to right direction
+actor Developer
+actor Recruiter
+actor "AI Engine" as AI
+
+
+rectangle "AI Matching System" {
+(Collect User Data)
+(Normalize Skill Data)
+(Calculate Matching Score)
+(Explain Matching Result)
+(Generate Recommendation)
+}
+
+
+Developer -- (Generate Recommendation)
+Recruiter -- (Generate Recommendation)
+
+
+(Generate Recommendation) --> (Collect User Data) : <<include>>
+(Generate Recommendation) --> (Normalize Skill Data) : <<include>>
+(Generate Recommendation) --> (Calculate Matching Score) : <<include>>
+(Calculate Matching Score) --> (Explain Matching Result) : <<include>>
+
+
+AI -- (Collect User Data)
+AI -- (Normalize Skill Data)
+AI -- (Calculate Matching Score)
+AI -- (Explain Matching Result)
+
+
+@enduml

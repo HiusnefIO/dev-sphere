@@ -1,0 +1,27 @@
+@startuml uc-dev-profile-mng
+left to right direction
+actor Developer
+
+
+rectangle "Profile Management" {
+(Create Profile)
+(Update Profile)
+(Version Profile)
+(Rollback Profile)
+(Manage Skill Matrix)
+(Manage Work Timeline)
+(Request Skill Verification)
+}
+
+
+Developer --> (Create Profile)
+Developer --> (Update Profile)
+Developer --> (Manage Skill Matrix)
+Developer --> (Manage Work Timeline)
+
+(Update Profile) --> (Version Profile) : <<include>>
+(Version Profile) -> (Rollback Profile) : <<extend>>
+(Manage Skill Matrix) --> (Request Skill Verification) : <<extend>>
+
+
+@enduml
