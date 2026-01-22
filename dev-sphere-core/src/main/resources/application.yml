@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: devsphere-core-service
+  web:
+    error:
+        include-stacktrace: always
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/devsphere
+    username: devsphere
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://sso.hiusnef.io.vn/realms/devsphere
+
+server:
+  port: 8080
+  shutdown: graceful
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+
+keycloak:
+  realm: devsphere
+  server-url: https://sso.hiusnef.io.vn
+  client-id: admin-cli
+  client-secret: <YOUR_CLIENT_SECRET_HERE>
