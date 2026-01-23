@@ -132,6 +132,23 @@ dev-sphere/
 └── README.md
 ```
 
+## 🚀 Run with Docker Compose
+
+Quick start to spin up the infra stack (PostgreSQL 18, Redis 8.4, Kafka 4.1.1, Traefik):
+
+1) Prerequisite: Docker Desktop/Engine with Compose v2.
+2) From repo root: `cd docker`
+3) Start services: `docker compose up -d` (add `--pull always` to refresh images)
+4) Check health/logs: `docker compose ps` and `docker compose logs -f <service>`
+5) Stop stack: `docker compose down` (append `-v` if you want to remove data volumes)
+
+Default endpoints/creds:
+
+- PostgreSQL: host `localhost`, port `5432`, user `devsphere`, pass `devsphere`, db `devsphere`
+- Redis: port `6379`
+- Kafka: external listener `localhost:9092`, internal listener `kafka:9094`
+- Traefik dashboard: `http://localhost:8080` (insecure dashboard enabled only for local dev)
+
 ## 🔧 Development
 
 ### Frontend Development
