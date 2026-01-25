@@ -1,0 +1,273 @@
+@startuml DevSphere ERD (Recruitment)
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+left to right direction
+
+enum UserRole {
+    DEVELOPER
+    RECRUITER
+}
+
+enum ProficiencyLevel {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
+    EXPERT
+}
+
+enum OfferStatus {
+    DRAFT
+    SENT
+    ACCEPTED
+    REJECTED
+    EXPIRED
+}
+
+entity "users" {
+    primary_key(id): UUID
+    --
+    unique(email): VARCHAR
+    unique(username): VARCHAR
+    first_name: VARCHAR
+    last_name: VARCHAR
+    role: UserRole
+    enabled: BOOLEAN
+    first_login_time: TIMESTAMP
+    last_access_time: TIMESTAMP
+    created_at: TIMESTAMP
+    updated_at: TIMESTAMP
+}
+
+package "Candidates" #FFF3E0 {
+    entity "candidates" {
+        primary_key(id): UUID
+        --
+        foreign_key(user_id): UUID
+        display_name: VARCHAR
+        overview: TEXT
+        location: VARCHAR
+        years_of_experience: INT
+        created_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+
+    entity "skills" {
+        primary_key(id): SERIAL
+        --
+        foreign_key(parent_id): INT
+        unique(code): VARCHAR
+        name: VARCHAR
+    }
+
+    entity "candidate_skills" {
+        primary_key(candidate_id): UUID
+        primary_key(skill_id): INT
+        --
+        foreign_key(candidate_id): UUID
+        foreign_key(skill_id): INT
+        proficiency: ProficiencyLevel
+        created_at: TIMESTAMP
+    }
+
+    entity "work_experiences" {
+        primary_key(id): UUID
+        --
+        foreign_key(candidate_id): UUID
+        company_name: VARCHAR
+        position: VARCHAR
+        start_date: DATE
+        end_date: DATE
+        is_current: BOOLEAN
+        description: TEXT
+    }
+
+    entity "educations" {
+        primary_key(id): UUID
+        --
+        foreign_key(candidate_id): UUID
+        institution: VARCHAR
+        degree: VARCHAR
+        field_of_study: VARCHAR
+        start_date: DATE
+        end_date: DATE
+    }
+
+    entity "projects" {
+        primary_key(id): UUID
+        --
+        foreign_key(candidate_id): UUID
+        title: VARCHAR
+        description: TEXT
+        repository_url: VARCHAR
+        start_date: DATE
+        end_date: DATE
+    }
+}
+
+package "Jobs & Applications" #FCE4EC {
+
+    entity "companies" {
+        primary_key(id): UUID
+        --
+        foreign_key(owner_id): UUID
+        name: VARCHAR
+        description: TEXT
+        created_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+
+    entity "recruitment_pipelines" {
+        primary_key(id): UUID
+        --
+        foreign_key(recruiter_id): UUID
+        name: VARCHAR
+        description: TEXT
+        created_at: TIMESTAMP
+    }
+
+    entity "pipeline_stages" {
+        primary_key(id): UUID
+        --
+        foreign_key(pipeline_id): UUID
+        name: VARCHAR
+        order_index: INT
+        created_at: TIMESTAMP
+    }
+
+    entity "pipeline_transitions" {
+        primary_key(id): UUID
+        --
+        foreign_key(pipeline_id): UUID
+        foreign_key(from_stage_id): UUID
+        foreign_key(to_stage_id): UUID
+        form_schema: JSONB
+    }
+
+    entity "jobs" {
+        primary_key(id): UUID
+        --
+        foreign_key(company_id): UUID
+        foreign_key(recruiter_id): UUID
+        foreign_key(pipeline_id): UUID
+        title: VARCHAR
+        description: TEXT
+        location: VARCHAR
+        created_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+
+    entity "applications" {
+        primary_key(id): UUID
+        --
+        foreign_key(job_id): UUID
+        foreign_key(candidate_id): UUID
+        foreign_key(current_stage_id): UUID
+        applied_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+
+    entity "application_stage_history" {
+        primary_key(id): UUID
+        --
+        foreign_key(application_id): UUID
+        foreign_key(from_stage_id): UUID
+        foreign_key(to_stage_id): UUID
+        action_at: TIMESTAMP
+        form_data: JSONB
+    }
+
+    entity "offers" {
+        primary_key(id): UUID
+        --
+        foreign_key(application_id): UUID
+        salary: DECIMAL
+        currency: VARCHAR(3)
+        contract_type: VARCHAR
+        start_date: DATE
+        status: OfferStatus
+        sent_at: TIMESTAMP
+        responded_at: TIMESTAMP
+    }
+}
+
+package "Dev Blog" #E8EAF6 {
+    entity "posts" {
+        primary_key(id): UUID
+        --
+        foreign_key(author_id): UUID
+        foreign_key(repost_from_id): UUID
+        title: VARCHAR
+        unique(slug): VARCHAR
+        content: TEXT
+        published_at: TIMESTAMP
+        created_at: TIMESTAMP
+        updated_at: TIMESTAMP
+    }
+
+    entity "post_comments" {
+        primary_key(id): UUID
+        --
+        foreign_key(post_id): UUID
+        foreign_key(author_id): UUID
+        foreign_key(parent_id): UUID
+        content: TEXT
+        created_at: TIMESTAMP
+    }
+
+    entity "post_likes" {
+        primary_key(user_id): UUID
+        primary_key(post_id): UUID
+        --
+        foreign_key(user_id): UUID
+        foreign_key(post_id): UUID
+        created_at: TIMESTAMP
+    }
+}
+
+users --|| candidates : owns
+candidates --{ candidate_skills : has
+candidates --{ work_experiences : has
+candidates --{ educations : has
+candidates --{ projects : has
+
+skills --{ skills : parent
+skills --{ candidate_skills : tagged
+
+users --{ companies : owns
+users --{ recruitment_pipelines : manages
+
+recruitment_pipelines --{ pipeline_stages : stages
+recruitment_pipelines --{ pipeline_transitions : transitions
+
+companies --{ jobs : posts
+users --{ jobs : recruits
+recruitment_pipelines --{ jobs : uses
+
+jobs --{ applications : receives
+candidates --{ applications : submits
+pipeline_stages --{ applications : current_stage
+
+applications --{ application_stage_history : history
+pipeline_stages --{ application_stage_history : from_stage
+pipeline_stages --{ application_stage_history : to_stage
+
+applications --|| offers : offer
+
+users --{ posts : writes
+posts --{ posts : reposts
+posts --{ post_comments : has
+posts --{ post_likes : liked_by
+users --{ post_comments : comments
+users --{ post_likes : likes
+post_comments --{ post_comments : replies
+
+UserRole .. users : role
+ProficiencyLevel .. candidate_skills : proficiency
+OfferStatus .. offers : status
+
+@enduml
